@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import pro from '../store/productStore';
+import * as ProductActions from '../actions/productActions';
 
 class ProductSubmit extends React.Component{
   constructor(props) {
@@ -15,10 +17,7 @@ class ProductSubmit extends React.Component{
     event.preventDefault();
     console.log(...Object.values(this.state));
     let { proName, proNo, proPrice } = this.state;
-    axios.post("http://localhost:5000/product", {proNo, proName, proPrice})
-      .then((response) => {
-        this.props.addProduct(response.data.result);
-      })
+    ProductActions.postProducts({proName, proNo, proPrice});
   }
 
   handelProductName = (event) => {

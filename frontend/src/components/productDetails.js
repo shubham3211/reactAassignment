@@ -1,25 +1,27 @@
 import React from 'react';
 import axios from 'axios';
-
+import Dispatcher from '../dispatcher/productDispatcher';
+import * as ProductActions from '../actions/productActions';
+import pro from '../store/productStore'
 
 class ProductDetails extends React.Component {
   constructor(props) {
     super(props);
+    ProductActions.fetchProduct();
     this.state = {
       products: []
     }
-    axios.get('http://localhost:5000/products')
-      .then((products) => {
-        this.setState({
-          products: [...this.state.products, ...products.data.result]
-        })
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+    pro.on("change", this.getProducts);
   }
 
-  renderProducts = () => [...this.state.products, ...this.props.products].map((product) => (
+  getProducts = () => {
+    console.log(pro.getAllProducts());
+    this.setState({
+      products: pro.getAllProducts()
+    })
+  }
+
+  renderProducts = () => [...this.state.products].map((product) => (
         !product.pid ? (
         <tr key={product._id}>
           <td>{product.proNo}</td>
